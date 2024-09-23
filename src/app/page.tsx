@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,27 +10,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import Image from "next/image";
 import { Search } from "lucide-react";
+import { Pagination } from "@/components/Pagination";
 
 export default function Home() {
   const [pokemons, setPokemons] = useState(
     [] as { name: string; id: string | number }[]
   );
+
   const [searchedValue, setSearchedValue] = useState("");
   const [searchBy, setSearchBy] = useState("pokemon");
+  const [paginationCalls, setPaginationCalls] = useState({
+    next: "",
+    previous: "",
+  });
+
+  useEffect(() => {
+    getPokemons("https://pokeapi.co/api/v2/pokemon");
+    getPokemonTypes();
+  }, []);
 
   const [types, setTypes] = useState([]);
 
-  const getPokemons = async (pagination = 20) => {
+  const getPokemons = async (url: string) => {
     try {
-      const res = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?limit=${pagination}`
-      );
-      const data = await res.json();
+      const response = await fetch(url);
+      const data = await response.json();
 
-      const formattedData = data.results.map(
+      const pokemons = data.results.map(
         ({ name, url }: { name: string; url: string }) => ({
           name,
           // sprite value splitted by url string: explain at README.md
@@ -38,7 +46,9 @@ export default function Home() {
         })
       );
 
-      setPokemons(formattedData);
+      setPokemons(pokemons);
+
+      setPaginationCalls({ next: data.next, previous: data.previous });
     } catch (error) {
       console.error(error);
     }
@@ -63,19 +73,13 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    getPokemons();
-    getPokemonTypes();
-  }, []);
-
   const searchPokemon = async () => {
+    if (!searchedValue) {
+      return;
+    }
+
     try {
       const res = await fetch(
-        `https://pokeapi.co/api/v2/${searchBy}/${searchedValue}`
-      );
-
-      console.log(
-        "api",
         `https://pokeapi.co/api/v2/${searchBy}/${searchedValue}`
       );
 
@@ -97,6 +101,12 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    if (searchBy === "type") {
+      setSearchedValue("1");
+    }
+  }, [searchBy]);
+
   return (
     <div>
       <div className="flex items-center w-1/2 p-5">
@@ -110,7 +120,7 @@ export default function Home() {
           </SelectContent>
         </Select>
         {searchBy === "type" ? (
-          <Select onValueChange={setSearchedValue}>
+          <Select onValueChange={setSearchedValue} defaultValue="1">
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Search by" />
             </SelectTrigger>
@@ -141,20 +151,25 @@ export default function Home() {
             <div className="bg-zinc-300 rounded p-2 flex flex-col justify-center items-center">
               <Image
                 src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
-                alt={`${name} front image`}
+                alt={`${name} picture`}
                 width={100}
                 height={100}
                 priority
               />
               <p>
                 {name
-                  .split("-") // Split by hyphen
-                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each part
+                  .split("-")
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                   .join(" ")}
               </p>
             </div>
           </li>
         ))}
+
+        <Pagination
+          onPreviousClick={() => getPokemons(paginationCalls.previous)}
+          onNextClick={() => getPokemons(paginationCalls.next)}
+        />
       </ul>
     </div>
   );
