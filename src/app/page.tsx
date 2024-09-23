@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import { Search } from "lucide-react";
 import { Pagination } from "@/components/Pagination";
+import Link from "next/link";
 
 export default function Home() {
   const [pokemons, setPokemons] = useState(
@@ -148,21 +149,23 @@ export default function Home() {
       <ul className="flex gap-10 flex-wrap p-5">
         {pokemons.map(({ name, id }: { name: string; id: string | number }) => (
           <li key={name}>
-            <div className="bg-zinc-300 rounded p-2 flex flex-col justify-center items-center">
-              <Image
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
-                alt={`${name} picture`}
-                width={100}
-                height={100}
-                priority
-              />
-              <p>
-                {name
-                  .split("-")
-                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                  .join(" ")}
-              </p>
-            </div>
+            <Link href={`pokemon/${name}`}>
+              <div className="cursor-pointer bg-zinc-300 rounded p-2 flex flex-col justify-center items-center">
+                <Image
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
+                  alt={`${name} picture`}
+                  width={100}
+                  height={100}
+                  priority
+                />
+                <p>
+                  {name
+                    .split("-")
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ")}
+                </p>
+              </div>
+            </Link>
           </li>
         ))}
 
