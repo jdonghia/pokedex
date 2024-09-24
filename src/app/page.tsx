@@ -28,6 +28,8 @@ export default function Home() {
     ? Number(searchParams.get("offset"))
     : 0;
 
+  const currentPage = Math.floor(offset / limit + 1);
+
   const { data: pokemonsResponse, isLoading } = useQuery({
     queryKey: ["get-pokemons", limit, offset],
     queryFn: async () => {
@@ -54,19 +56,20 @@ export default function Home() {
 
   const router = useRouter();
   const [totalItems, setTotalItems] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
 
-  // const setQueryParams = () => {
-  //   const currentParams = new URLSearchParams(searchParams);
+  // const offset = itemsPerPage * (currentPage - 1);
 
-  //   const offset = itemsPerPage * (currentPage - 1);
+  const setQueryParams = () => {
+    const currentParams = new URLSearchParams(searchParams);
 
-  //   currentParams.set("limit", itemsPerPage.toString());
-  //   currentParams.set("offset", offset.toString());
+    const offset = itemsPerPage * (currentPage - 1);
 
-  //   router.push(`?${currentParams.toString()}`);
-  // };
+    currentParams.set("limit", itemsPerPage.toString());
+    currentParams.set("offset", offset.toString());
+
+    router.push(`?${currentParams.toString()}`);
+  };
 
   const [pokemons, setPokemons] = useState(
     [] as { name: string; id: string | number }[]
@@ -82,13 +85,6 @@ export default function Home() {
   useEffect(() => {
     if (searchParams.get("limit") && searchParams.get("offset")) {
       setItemsPerPage(parseInt(searchParams.get("limit") as string));
-      setCurrentPage(
-        Math.floor(
-          parseInt(searchParams.get("offset") as string) /
-            parseInt(searchParams.get("limit") as string) +
-            1
-        )
-      );
     }
 
     getPokemons();
@@ -177,6 +173,11 @@ export default function Home() {
     }
   }, [searchBy]);
 
+  useEffect(() => {
+    // setQueryParams();
+    getPokemons();
+  }, [currentPage]);
+
   return (
     <div>
       <div className="flex items-center w-1/2 p-5">
@@ -247,12 +248,7 @@ export default function Home() {
             <Pagination
               totalItems={pokemonsResponse && pokemonsResponse.count}
               itemsPerPage={limit}
-              currentPage={Math.floor(
-                parseInt(searchParams.get("offset") as string) /
-                  parseInt(searchParams.get("limit") as string) +
-                  1
-              )}
-              // setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
             />
           </div>
         )}
