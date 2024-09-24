@@ -1,11 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { Pagination } from "@/components/Pagination";
-import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { POKEAPI_BASE_URL } from "./constants";
+import { POKEAPI_BASE_URL } from "./utils/constants";
 import { SearchPokemon } from "@/components/SearchPokemon";
 import { PokemonsList } from "@/components/PokemonsList";
 import { Suspense } from "react";
@@ -13,17 +11,12 @@ import { Suspense } from "react";
 export default function Home() {
   const searchParams = useSearchParams();
 
-  const pokemon = searchParams.get("pokemon");
-
-  const type = searchParams.get("type");
-
-  const limit = searchParams.get("limit")
-    ? Number(searchParams.get("limit"))
-    : 20;
-
-  const offset = searchParams.get("offset")
-    ? Number(searchParams.get("offset"))
-    : 0;
+  const { pokemon, type, limit, offset } = {
+    pokemon: searchParams.get("pokemon"),
+    type: searchParams.get("type"),
+    limit: searchParams.get("limit") ? Number(searchParams.get("limit")) : 20,
+    offset: searchParams.get("offset") ? Number(searchParams.get("offset")) : 0,
+  };
 
   const currentPage = Math.floor(offset / limit + 1);
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ReactQueryProvider } from "@/components/ReactQueryProvider";
+import { ReactQueryProvider } from "@/app/providers/ReactQueryProvider";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {

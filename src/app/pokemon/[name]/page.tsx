@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { twJoin, twMerge } from "tailwind-merge";
-import { POKEMON_TYPE_TAILWIND_COLORS } from "@/app/constants";
+import { POKEMON_TYPE_TAILWIND_COLORS } from "@/app/utils/constants";
 import { PokemonImage } from "./PokemonImage";
 
 interface PokemonDetailsProps {
