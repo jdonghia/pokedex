@@ -68,6 +68,8 @@ export default function Home() {
         })
       );
 
+      console.log(formattedData);
+
       setTypes(formattedData);
     } catch (error) {
       console.error(error);
@@ -87,12 +89,14 @@ export default function Home() {
       let data = await res.json();
 
       if (data.pokemon) {
-        data = data.pokemon.map((item) => {
-          return {
-            name: item.pokemon.name,
-            id: item.pokemon.url.split("/")[6],
-          };
-        });
+        data = data.pokemon.map(
+          (item: { pokemon: { name: string; url: string } }) => {
+            return {
+              name: item.pokemon.name,
+              id: item.pokemon.url.split("/")[6],
+            };
+          }
+        );
         setPokemons([...data]);
       } else {
         setPokemons([data]);
