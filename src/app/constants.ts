@@ -18,3 +18,5 @@ export const POKEMON_TYPE_TAILWIND_COLORS = {
   dark: "bg-dark",
   fairy: "bg-fairy",
 };
+
+export const POKEAPI_BASE_URL = "https://pokeapi.co/api/v2";

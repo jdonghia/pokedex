@@ -16,9 +16,15 @@ import { Pagination } from "@/components/Pagination";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { POKEAPI_BASE_URL } from "./constants";
 
 export default function Home() {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
+
+  const pokemon = searchParams.get("pokemon");
+  const type = searchParams.get("type");
 
   const limit = searchParams.get("limit")
     ? Number(searchParams.get("limit"))
@@ -30,23 +36,59 @@ export default function Home() {
 
   const currentPage = Math.floor(offset / limit + 1);
 
+  const [searchedValue, setSearchedValue] = useState("1");
+  const [searchBy, setSearchBy] = useState("pokemon");
+
   const { data: pokemonsResponse, isLoading } = useQuery({
-    queryKey: ["get-pokemons", limit, offset],
+    queryKey: ["get-pokemons", limit, offset, pokemon, type],
     queryFn: async () => {
-      const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
-      );
+      let url = `${POKEAPI_BASE_URL}/pokemon`;
+
+      if (limit && offset) {
+        url = `${POKEAPI_BASE_URL}/pokemon?limit=${limit}&offset=${offset}`;
+      }
+
+      if (pokemon) {
+        url = `${POKEAPI_BASE_URL}/pokemon/${pokemon}`;
+      }
+
+      if (type) {
+        url = `${POKEAPI_BASE_URL}/type/${type}`;
+      }
+
+      const response = await fetch(url);
       const data = await response.json();
+
+      const getPokemonRows = () => {
+        if (!data.pokemon && !data.results) {
+          return [data];
+        }
+
+        if (data.pokemon) {
+          return data.pokemon.map(
+            (item: { pokemon: { name: string; url: string } }) => {
+              return {
+                name: item.pokemon.name,
+                id: item.pokemon.url.split("/")[6],
+              };
+            }
+          );
+        }
+
+        if (data.results) {
+          return data.results.map(
+            ({ name, url }: { name: string; url: string }) => ({
+              name,
+              // sprite value splitted by url string: explain at README.md
+              id: url.split("/")[6],
+            })
+          );
+        }
+      };
 
       const formattedData = {
         ...data,
-        results: data.results.map(
-          ({ name, url }: { name: string; url: string }) => ({
-            name,
-            // sprite value splitted by url string: explain at README.md
-            id: url.split("/")[6],
-          })
-        ),
+        results: getPokemonRows(),
       };
 
       return formattedData;
@@ -54,69 +96,11 @@ export default function Home() {
     placeholderData: keepPreviousData,
   });
 
-  const router = useRouter();
-  const [totalItems, setTotalItems] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
-
-  // const offset = itemsPerPage * (currentPage - 1);
-
-  const setQueryParams = () => {
-    const currentParams = new URLSearchParams(searchParams);
-
-    const offset = itemsPerPage * (currentPage - 1);
-
-    currentParams.set("limit", itemsPerPage.toString());
-    currentParams.set("offset", offset.toString());
-
-    router.push(`?${currentParams.toString()}`);
-  };
-
-  const [pokemons, setPokemons] = useState(
-    [] as { name: string; id: string | number }[]
-  );
-
-  const [searchedValue, setSearchedValue] = useState("");
-  const [searchBy, setSearchBy] = useState("pokemon");
-  const [paginationCalls, setPaginationCalls] = useState({
-    next: "",
-    previous: "",
-  });
-
-  useEffect(() => {
-    if (searchParams.get("limit") && searchParams.get("offset")) {
-      setItemsPerPage(parseInt(searchParams.get("limit") as string));
-    }
-
-    getPokemons();
-    getPokemonTypes();
-  }, []);
-
   const [types, setTypes] = useState([]);
 
-  const getPokemons = async () => {
-    try {
-      const url = `https://pokeapi.co/api/v2/pokemon?limit=${itemsPerPage}&offset=${offset}`;
-
-      const response = await fetch(url);
-      const data = await response.json();
-
-      const pokemons = data.results.map(
-        ({ name, url }: { name: string; url: string }) => ({
-          name,
-          // sprite value splitted by url string: explain at README.md
-          id: url.split("/")[6],
-        })
-      );
-
-      setPokemons(pokemons);
-
-      setTotalItems(data.count);
-
-      setPaginationCalls({ next: data.next, previous: data.previous });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  useEffect(() => {
+    getPokemonTypes();
+  }, []);
 
   const getPokemonTypes = async () => {
     try {
@@ -137,46 +121,10 @@ export default function Home() {
     }
   };
 
-  const searchPokemon = async () => {
-    if (!searchedValue) {
-      return;
-    }
-
-    try {
-      const res = await fetch(
-        `https://pokeapi.co/api/v2/${searchBy}/${searchedValue}`
-      );
-
-      let data = await res.json();
-
-      if (data.pokemon) {
-        data = data.pokemon.map(
-          (item: { pokemon: { name: string; url: string } }) => {
-            return {
-              name: item.pokemon.name,
-              id: item.pokemon.url.split("/")[6],
-            };
-          }
-        );
-        setPokemons([...data]);
-      } else {
-        setPokemons([data]);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+  const handlePokemonSearch = () => {
+    params.set(searchBy, searchedValue);
+    router.push(`?${searchBy}=${searchedValue}`);
   };
-
-  useEffect(() => {
-    if (searchBy === "type") {
-      setSearchedValue("1");
-    }
-  }, [searchBy]);
-
-  useEffect(() => {
-    // setQueryParams();
-    getPokemons();
-  }, [currentPage]);
 
   return (
     <div>
@@ -208,11 +156,11 @@ export default function Home() {
             type="text"
             placeholder="Search for pokemon"
             onChange={(e) => setSearchedValue(e.target.value)}
-            onKeyDown={(e) => (e.key === "Enter" ? searchPokemon() : "")}
+            onKeyDown={(e) => (e.key === "Enter" ? handlePokemonSearch() : "")}
           />
         )}
 
-        <Button onClick={searchPokemon}>
+        <Button onClick={handlePokemonSearch}>
           <Search />
         </Button>
       </div>
@@ -243,7 +191,7 @@ export default function Home() {
               </li>
             )
           )}
-        {!isLoading && (
+        {!isLoading && pokemonsResponse.results.length !== 1 && (
           <div className="flex items-center w-full">
             <Pagination
               totalItems={pokemonsResponse && pokemonsResponse.count}
