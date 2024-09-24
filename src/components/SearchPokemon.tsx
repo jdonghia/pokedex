@@ -12,7 +12,7 @@ export function SearchPokemon() {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
 
-  const [searchedValue, setSearchedValue] = useState("1");
+  const [searchedValue, setSearchedValue] = useState("");
   const [searchBy, setSearchBy] = useState("pokemon");
   const [pokemonTypes, setPokemonTypes] = useState([] as OptionProps[]);
 
@@ -26,6 +26,14 @@ export function SearchPokemon() {
       label: "Type",
     },
   ];
+
+  useEffect(() => {
+    if (searchBy === "type") {
+      setSearchedValue("1");
+    } else {
+      setSearchedValue("");
+    }
+  }, [searchBy]);
 
   useEffect(() => {
     const getPokemonTypes = async () => {
@@ -50,13 +58,22 @@ export function SearchPokemon() {
   }, []);
 
   const handlePokemonSearch = () => {
-    params.set(searchBy, searchedValue);
-    router.push(`?${searchBy}=${searchedValue}`);
+    if (searchedValue) {
+      params.set(searchBy, searchedValue);
+      router.push(`?${searchBy}=${searchedValue}`);
+    }
+  };
+
+  const resetFilter = () => {
+    setSearchBy("pokemon");
+    setSearchedValue("");
+    router.push("/");
   };
 
   return (
     <div className="flex items-center w-1/2 p-5">
       <CustomSelect
+        value={searchBy}
         onValueChange={setSearchBy}
         options={searchByOptions}
         placeholder="Search by"
@@ -79,6 +96,7 @@ export function SearchPokemon() {
       <Button onClick={handlePokemonSearch}>
         <Search />
       </Button>
+      <Button onClick={resetFilter}>reset filter</Button>
     </div>
   );
 }

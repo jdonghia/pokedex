@@ -11,6 +11,7 @@ interface SelectProps {
   options: OptionProps[];
   placeholder?: string;
   defaultValue?: string;
+  value?: string;
 }
 
 export function CustomSelect({
@@ -18,9 +19,14 @@ export function CustomSelect({
   options,
   placeholder,
   defaultValue,
+  value,
 }: SelectProps) {
   return (
-    <Select onValueChange={onValueChange} defaultValue={defaultValue}>
+    <Select
+      onValueChange={onValueChange}
+      defaultValue={defaultValue}
+      value={value}
+    >
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

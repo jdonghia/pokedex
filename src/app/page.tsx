@@ -3,11 +3,12 @@
 import Image from "next/image";
 import { Pagination } from "@/components/Pagination";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { POKEAPI_BASE_URL } from "./constants";
 import { SearchPokemon } from "@/components/SearchPokemon";
 import { PokemonsList } from "@/components/PokemonsList";
+import { Suspense } from "react";
 
 export default function Home() {
   const searchParams = useSearchParams();
@@ -43,42 +44,47 @@ export default function Home() {
         url = `${POKEAPI_BASE_URL}/type/${type}`;
       }
 
-      const response = await fetch(url);
-      const data = await response.json();
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
 
-      const getPokemonRows = () => {
-        if (!data.pokemon && !data.results) {
-          return [data];
-        }
+        const getPokemonRows = () => {
+          if (!data.pokemon && !data.results) {
+            return [data];
+          }
 
-        if (data.pokemon) {
-          return data.pokemon.map(
-            (item: { pokemon: { name: string; url: string } }) => {
-              return {
-                name: item.pokemon.name,
-                id: item.pokemon.url.split("/")[6],
-              };
-            }
-          );
-        }
+          if (data.pokemon) {
+            return data.pokemon.map(
+              (item: { pokemon: { name: string; url: string } }) => {
+                return {
+                  name: item.pokemon.name,
+                  id: item.pokemon.url.split("/")[6],
+                };
+              }
+            );
+          }
 
-        if (data.results) {
-          return data.results.map(
-            ({ name, url }: { name: string; url: string }) => ({
-              name,
-              // sprite value splitted by url string: explain at README.md
-              id: url.split("/")[6],
-            })
-          );
-        }
-      };
+          if (data.results) {
+            return data.results.map(
+              ({ name, url }: { name: string; url: string }) => ({
+                name,
+                // sprite value splitted by url string: explain at README.md
+                id: url.split("/")[6],
+              })
+            );
+          }
+        };
 
-      const formattedData = {
-        ...data,
-        results: getPokemonRows(),
-      };
+        const formattedData = {
+          ...data,
+          results: getPokemonRows(),
+        };
 
-      return formattedData;
+        return formattedData;
+      } catch (error) {
+        // catch exception, push user to 404 route, pokemon not found
+        console.error(error);
+      }
     },
     placeholderData: keepPreviousData,
   });
@@ -89,11 +95,15 @@ export default function Home() {
         <>
           <SearchPokemon />
           <PokemonsList pokemons={pokemonsResponse?.results} />
-          <Pagination
-            totalItems={pokemonsResponse?.count}
-            itemsPerPage={limit}
-            currentPage={currentPage}
-          />
+          {!(pokemon || type) && (
+            <Suspense>
+              <Pagination
+                totalItems={pokemonsResponse?.count}
+                itemsPerPage={limit}
+                currentPage={currentPage}
+              />
+            </Suspense>
+          )}
         </>
       )}
     </>
