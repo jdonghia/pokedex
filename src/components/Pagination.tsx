@@ -124,7 +124,7 @@ export function Pagination({
   };
 
   return (
-    <div>
+    <div className="flex items-center w-full">
       <p>Rows per page</p>
       <Select defaultValue="20" onValueChange={handleRowsPerPage}>
         <SelectTrigger>

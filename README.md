@@ -34,3 +34,17 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+{/_ PokeAPI pokemon list does not return id, only the name. To search
+for png sprite, we need to check for id. The url key returns the
+id at de 6 index position / splitted. _/}
+
+
+cannot find multiple startswith with name, only with type
+
+https://github.com/PokeAPI/pokeapi/issues/474
+Search was implemented at some point. It's available if you host pokeapi locally. We don't provide this functionality at pokeapi.co due to costs
+
+// on loading effect on image
+
+cannot paginate type
