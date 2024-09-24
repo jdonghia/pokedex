@@ -14,8 +14,60 @@ import Image from "next/image";
 import { Search } from "lucide-react";
 import { Pagination } from "@/components/Pagination";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 export default function Home() {
+  const searchParams = useSearchParams();
+
+  const limit = searchParams.get("limit")
+    ? Number(searchParams.get("limit"))
+    : 20;
+
+  const offset = searchParams.get("offset")
+    ? Number(searchParams.get("offset"))
+    : 0;
+
+  const { data: pokemonsResponse, isLoading } = useQuery({
+    queryKey: ["get-pokemons", limit, offset],
+    queryFn: async () => {
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
+      );
+      const data = await response.json();
+
+      const formattedData = {
+        ...data,
+        results: data.results.map(
+          ({ name, url }: { name: string; url: string }) => ({
+            name,
+            // sprite value splitted by url string: explain at README.md
+            id: url.split("/")[6],
+          })
+        ),
+      };
+
+      return formattedData;
+    },
+    placeholderData: keepPreviousData,
+  });
+
+  const router = useRouter();
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
+
+  // const setQueryParams = () => {
+  //   const currentParams = new URLSearchParams(searchParams);
+
+  //   const offset = itemsPerPage * (currentPage - 1);
+
+  //   currentParams.set("limit", itemsPerPage.toString());
+  //   currentParams.set("offset", offset.toString());
+
+  //   router.push(`?${currentParams.toString()}`);
+  // };
+
   const [pokemons, setPokemons] = useState(
     [] as { name: string; id: string | number }[]
   );
@@ -28,14 +80,27 @@ export default function Home() {
   });
 
   useEffect(() => {
-    getPokemons("https://pokeapi.co/api/v2/pokemon");
+    if (searchParams.get("limit") && searchParams.get("offset")) {
+      setItemsPerPage(parseInt(searchParams.get("limit") as string));
+      setCurrentPage(
+        Math.floor(
+          parseInt(searchParams.get("offset") as string) /
+            parseInt(searchParams.get("limit") as string) +
+            1
+        )
+      );
+    }
+
+    getPokemons();
     getPokemonTypes();
   }, []);
 
   const [types, setTypes] = useState([]);
 
-  const getPokemons = async (url: string) => {
+  const getPokemons = async () => {
     try {
+      const url = `https://pokeapi.co/api/v2/pokemon?limit=${itemsPerPage}&offset=${offset}`;
+
       const response = await fetch(url);
       const data = await response.json();
 
@@ -48,6 +113,8 @@ export default function Home() {
       );
 
       setPokemons(pokemons);
+
+      setTotalItems(data.count);
 
       setPaginationCalls({ next: data.next, previous: data.previous });
     } catch (error) {
@@ -67,8 +134,6 @@ export default function Home() {
           id: url.split("/")[6],
         })
       );
-
-      console.log(formattedData);
 
       setTypes(formattedData);
     } catch (error) {
@@ -151,32 +216,46 @@ export default function Home() {
         </Button>
       </div>
       <ul className="flex gap-10 flex-wrap p-5">
-        {pokemons.map(({ name, id }: { name: string; id: string | number }) => (
-          <li key={name}>
-            <Link href={`pokemon/${name}`}>
-              <div className="cursor-pointer bg-zinc-300 rounded p-2 flex flex-col justify-center items-center">
-                <Image
-                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
-                  alt={`${name} picture`}
-                  width={100}
-                  height={100}
-                  priority
-                />
-                <p>
-                  {name
-                    .split("-")
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(" ")}
-                </p>
-              </div>
-            </Link>
-          </li>
-        ))}
-
-        <Pagination
-          onPreviousClick={() => getPokemons(paginationCalls.previous)}
-          onNextClick={() => getPokemons(paginationCalls.next)}
-        />
+        {pokemonsResponse &&
+          pokemonsResponse.results.map(
+            ({ name, id }: { name: string; id: string | number }) => (
+              <li key={name}>
+                <Link href={`pokemon/${name}`}>
+                  <div className="cursor-pointer bg-zinc-300 rounded p-2 flex flex-col justify-center items-center">
+                    <Image
+                      src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
+                      alt={`${name} picture`}
+                      width={100}
+                      height={100}
+                      priority
+                    />
+                    <p>
+                      {name
+                        .split("-")
+                        .map(
+                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                        )
+                        .join(" ")}
+                    </p>
+                  </div>
+                </Link>
+              </li>
+            )
+          )}
+        {!isLoading && (
+          <div className="flex items-center w-full">
+            <Pagination
+              totalItems={pokemonsResponse && pokemonsResponse.count}
+              itemsPerPage={limit}
+              currentPage={Math.floor(
+                parseInt(searchParams.get("offset") as string) /
+                  parseInt(searchParams.get("limit") as string) +
+                  1
+              )}
+              // setCurrentPage={setCurrentPage}
+            />
+          </div>
+        )}
       </ul>
     </div>
   );
