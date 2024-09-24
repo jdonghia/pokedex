@@ -6,7 +6,6 @@ import { Search } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { formatApiJSON } from "@/app/utils/pokeapi";
 
 export function SearchPokemon() {
   const router = useRouter();
