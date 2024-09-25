@@ -83,7 +83,7 @@ export default function Home() {
   });
 
   return (
-    <div className=" grid place-items-center">
+    <div className=" grid place-items-center bg-neutral-400">
       <div className="w-2/3 grid m-auto grid-rows-app grid-cols-app h-screen">
         {!isLoading && (
           <>
