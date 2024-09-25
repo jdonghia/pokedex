@@ -72,7 +72,7 @@ export function PokemonSearch() {
   };
 
   return (
-    <div className="flex items-center py-3 sticky w-full top-0 z-50 bg-orange-500 justify-center">
+    <div className="row-span-2 col-[span_36_/_span_36]  grid place-items-center">
       <div className="flex items-center w-3/6">
         <CustomSelect
           value={searchBy}

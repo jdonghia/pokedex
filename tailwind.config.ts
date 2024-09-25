@@ -9,6 +9,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      gridTemplateRows: {
+        "app": "repeat(36, minmax(0, 1fr))",
+      },
+
+      gridTemplateColumns: {
+        "app": "repeat(36, minmax(0, 1fr))",
+      },
       colors: {
         normal: "#a4acaf",
         fighting: "#d56723",

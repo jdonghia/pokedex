@@ -7,11 +7,11 @@ interface PokemonListProps {
 
 export function PokemonsList({ pokemons }: PokemonListProps) {
   return (
-    <ul className="flex flex-wrap h-screen justify-center overflow-scroll mb-14">
+    <ul className="row-[span_32_/_span_32]  col-[span_36_/_span_36] overflow-scroll flex flex-wrap gap-10 py-5 justify-center">
       {pokemons.map(({ name, id }: { name: string; id: string | number }) => (
         <li
           key={name}
-          className="w-1/6 h-1/5 bg-white flex flex-col items-center justify-center z-30"
+          className="w-1/6 h-1/4 bg-zinc-500 flex flex-col items-center justify-center z-30"
         >
           <Link href={`pokemon/${name}`}>
             <div className="cursor-pointer rounded p-2 flex flex-col  items-center relative">

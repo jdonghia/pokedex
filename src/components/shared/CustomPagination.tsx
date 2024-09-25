@@ -144,7 +144,7 @@ export function CustomPagination({
   ];
 
   return (
-    <div className="flex items-center w-2/3 bg-purple-500 fixed bottom-0 justify-center z-50 py-3">
+    <div className="row-span-2 col-[span_36_/_span_36] grid place-items-center">
       <div className="flex items-center w-3/6 justify-between">
         <Pagination>
           <PaginationContent>

@@ -83,8 +83,8 @@ export default function Home() {
   });
 
   return (
-    <div className="bg-red-500 fixed inset-0">
-      <div className="w-2/3 grid place-items-center m-auto bg-blue-500">
+    <div className=" grid place-items-center">
+      <div className="w-2/3 grid m-auto grid-rows-app grid-cols-app h-screen">
         {!isLoading && (
           <>
             <PokemonSearch />
