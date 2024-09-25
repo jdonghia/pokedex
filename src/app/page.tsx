@@ -25,7 +25,7 @@ export default function Home() {
     queryFn: async () => {
       let url = `${POKEAPI_BASE_URL}/pokemon`;
 
-      if (limit && offset) {
+      if (limit.toString() && offset.toString()) {
         url = `${POKEAPI_BASE_URL}/pokemon?limit=${limit}&offset=${offset}`;
       }
 

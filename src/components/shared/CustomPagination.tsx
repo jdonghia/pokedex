@@ -39,7 +39,7 @@ export function CustomPagination({
     pages.push(i);
   }
 
-  const activePages = pages.slice(
+  let activePages = pages.slice(
     Math.max(0, currentPage - 1 - PAGE_NUMBER_LIMIT),
     Math.min(currentPage - 1 + PAGE_NUMBER_LIMIT + 1, pages.length)
   );
@@ -119,7 +119,10 @@ export function CustomPagination({
   };
 
   const handleRowsPerPage = (value: string) => {
+    const offset = itemsPerPage * (currentPage - 1);
+
     params.set("limit", value.toString());
+    params.set("offset", offset.toString());
 
     router.push(`?${params.toString()}`);
   };
@@ -127,7 +130,10 @@ export function CustomPagination({
   return (
     <div className="flex items-center w-full">
       <p>Rows per page</p>
-      <Select defaultValue="20" onValueChange={handleRowsPerPage}>
+      <Select
+        defaultValue={itemsPerPage.toString()}
+        onValueChange={handleRowsPerPage}
+      >
         <SelectTrigger>
           <SelectValue />
         </SelectTrigger>
