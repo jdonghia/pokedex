@@ -92,6 +92,7 @@ export function PokemonSearch() {
         )}
         {searchBy === 'pokemon' && (
           <Input
+            value={searchedValue}
             className="rounded-none"
             type="text"
             placeholder="Search for pokemon"
