@@ -83,22 +83,24 @@ export default function Home() {
   });
 
   return (
-    <>
-      {!isLoading && (
-        <>
-          <PokemonSearch />
-          <PokemonsList pokemons={pokemonsResponse?.results} />
-          {!(pokemon || type) && (
-            <Suspense>
-              <CustomPagination
-                totalItems={pokemonsResponse?.count}
-                itemsPerPage={limit}
-                currentPage={currentPage}
-              />
-            </Suspense>
-          )}
-        </>
-      )}
-    </>
+    <div className="bg-red-500 fixed inset-0">
+      <div className="w-2/3 grid place-items-center m-auto bg-blue-500">
+        {!isLoading && (
+          <>
+            <PokemonSearch />
+            <PokemonsList pokemons={pokemonsResponse?.results} />
+            {!(pokemon || type) && (
+              <Suspense>
+                <CustomPagination
+                  totalItems={pokemonsResponse?.count}
+                  itemsPerPage={limit}
+                  currentPage={currentPage}
+                />
+              </Suspense>
+            )}
+          </>
+        )}
+      </div>
+    </div>
   );
 }

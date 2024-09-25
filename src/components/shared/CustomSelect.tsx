@@ -12,6 +12,7 @@ interface SelectProps {
   placeholder?: string;
   defaultValue?: string;
   value?: string;
+  className?: string;
 }
 
 export function CustomSelect({
@@ -20,6 +21,7 @@ export function CustomSelect({
   placeholder,
   defaultValue,
   value,
+  className,
 }: SelectProps) {
   return (
     <Select
@@ -27,7 +29,7 @@ export function CustomSelect({
       defaultValue={defaultValue}
       value={value}
     >
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className={className}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>

@@ -2,18 +2,19 @@
 
 import { CustomSelect } from "@/components/shared/CustomSelect";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { RotateCw, Search } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { TbPokeball } from "react-icons/tb";
 
 export function PokemonSearch() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
 
-  const [searchedValue, setSearchedValue] = useState("");
   const [searchBy, setSearchBy] = useState("pokemon");
+  const [searchedValue, setSearchedValue] = useState("");
   const [pokemonTypes, setPokemonTypes] = useState([] as OptionProps[]);
 
   const searchByOptions = [
@@ -71,32 +72,42 @@ export function PokemonSearch() {
   };
 
   return (
-    <div className="flex items-center w-1/2 p-5">
-      <CustomSelect
-        value={searchBy}
-        onValueChange={setSearchBy}
-        options={searchByOptions}
-        placeholder="Search by"
-      />
-      {searchBy === "type" && (
+    <div className="flex items-center py-3 sticky w-full top-0 z-50 bg-orange-500 justify-center">
+      <div className="flex items-center w-3/6">
         <CustomSelect
-          onValueChange={setSearchedValue}
-          options={pokemonTypes}
-          defaultValue="normal"
+          value={searchBy}
+          onValueChange={setSearchBy}
+          options={searchByOptions}
+          placeholder="Search by"
+          className="rounded-none rounded-s"
         />
-      )}
-      {searchBy === "pokemon" && (
-        <Input
-          type="text"
-          placeholder="Search for pokemon"
-          onChange={(e) => setSearchedValue(e.target.value)}
-          onKeyDown={(e) => (e.key === "Enter" ? handlePokemonSearch() : "")}
-        />
-      )}
-      <Button onClick={handlePokemonSearch}>
-        <Search />
-      </Button>
-      <Button onClick={resetFilter}>reset filter</Button>
+        {searchBy === "type" && (
+          <CustomSelect
+            onValueChange={setSearchedValue}
+            options={pokemonTypes}
+            defaultValue="normal"
+            className="rounded-none"
+          />
+        )}
+        {searchBy === "pokemon" && (
+          <Input
+            className="rounded-none"
+            type="text"
+            placeholder="Search for pokemon"
+            onChange={(e) => setSearchedValue(e.target.value)}
+            onKeyDown={(e) => (e.key === "Enter" ? handlePokemonSearch() : "")}
+          />
+        )}
+        <Button
+          onClick={handlePokemonSearch}
+          className="bg-white rounded-none rounded-e"
+        >
+          <TbPokeball size={25} className="text-red-500" />
+        </Button>
+        <Button className="ms-5 bg-white" onClick={resetFilter}>
+          <RotateCw className="text-red-500" />
+        </Button>
+      </div>
     </div>
   );
 }

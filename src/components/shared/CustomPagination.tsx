@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CustomSelect } from "./CustomSelect";
 
 interface PaginationProps {
   totalItems: number;
@@ -22,7 +23,7 @@ interface PaginationProps {
   currentPage: number;
 }
 
-const MAX_NUMBER_OF_PAGES = 5;
+const MAX_NUMBER_OF_PAGES = 3;
 const PAGE_NUMBER_LIMIT = Math.floor(MAX_NUMBER_OF_PAGES / 2);
 
 export function CustomPagination({
@@ -127,33 +128,45 @@ export function CustomPagination({
     router.push(`?${params.toString()}`);
   };
 
+  const itemsPerPageOptions = [
+    {
+      value: "20",
+      label: "20",
+    },
+    {
+      value: "30",
+      label: "30",
+    },
+    {
+      value: "40",
+      label: "40",
+    },
+  ];
+
   return (
-    <div className="flex items-center w-full">
-      <p>Rows per page</p>
-      <Select
-        defaultValue={itemsPerPage.toString()}
-        onValueChange={handleRowsPerPage}
-      >
-        <SelectTrigger>
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="20">20</SelectItem>
-          <SelectItem value="30">30</SelectItem>
-          <SelectItem value="40">40</SelectItem>
-        </SelectContent>
-      </Select>
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious onClick={handlePrevPage} />
-          </PaginationItem>
-          {renderPages()}
-          <PaginationItem>
-            <PaginationNext onClick={handleNextPage} />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+    <div className="flex items-center w-2/3 bg-purple-500 fixed bottom-0 justify-center z-50 py-3">
+      <div className="flex items-center w-3/6 justify-between">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious onClick={handlePrevPage} />
+            </PaginationItem>
+            {renderPages()}
+            <PaginationItem>
+              <PaginationNext onClick={handleNextPage} />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+        <div className="w-6/12 flex items-center gap-3">
+          <p className="text-sm">Pokemons per page:</p>
+          <CustomSelect
+            className="w-4/12"
+            defaultValue={itemsPerPage.toString()}
+            onValueChange={handleRowsPerPage}
+            options={itemsPerPageOptions}
+          />
+        </div>
+      </div>
     </div>
   );
 }
