@@ -43,7 +43,7 @@ export default function PokemonDetails({ params }: PokemonDetailsProps) {
             {pokemon.types.map(({ type }: { type: { name: string } }) => (
               <p
                 className="text-4xl"
-                onClick={() => router.push(`/?type=${type}`)}
+                onClick={() => router.push(`/?type=${type.name}`)}
               >
                 {type.name}
               </p>
