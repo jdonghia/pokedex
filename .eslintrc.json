@@ -1,9 +1,12 @@
 {
   "extends": [
+    "@rocketseat/eslint-config/next",
     "next/core-web-vitals",
-    "next/typescript"
+    "next/typescript",
+    "plugin:tailwindcss/recommended"
   ],
   "rules": {
-    "no-empty-interface": false
-  }
+    "react-hooks/exhaustive-deps": 0
+  },
+  "root": true
 }

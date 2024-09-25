@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { useState } from "react";
+import { Button } from '@/components/ui/button'
+import Image from 'next/image'
+import { useState } from 'react'
 
 interface PokemonImageProps {
-  imgs: { default: string; shiny: string };
-  name: string;
+  imgs: { default: string; shiny: string }
+  name: string
 }
 
 export function PokemonImage({ imgs, name }: PokemonImageProps) {
-  const [currentImg, setCurrentImg] = useState(imgs.default);
+  const [currentImg, setCurrentImg] = useState(imgs.default)
 
   return (
     <>
@@ -26,5 +26,5 @@ export function PokemonImage({ imgs, name }: PokemonImageProps) {
         alt={`${name} picture`}
       />
     </>
-  );
+  )
 }

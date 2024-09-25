@@ -1,18 +1,20 @@
+import type { OptionProps } from '@/app/utils/types'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 
 interface SelectProps {
-  onValueChange: (value: any) => void;
-  options: OptionProps[];
-  placeholder?: string;
-  defaultValue?: string;
-  value?: string;
-  className?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onValueChange: (value: any) => void
+  options: OptionProps[]
+  placeholder?: string
+  defaultValue?: string
+  value?: string
+  className?: string
 }
 
 export function CustomSelect({
@@ -40,5 +42,5 @@ export function CustomSelect({
         ))}
       </SelectContent>
     </Select>
-  );
+  )
 }

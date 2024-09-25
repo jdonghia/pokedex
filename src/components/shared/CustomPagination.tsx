@@ -6,103 +6,96 @@ import {
   PaginationNext,
   PaginationLink,
   PaginationEllipsis,
-} from "@/components/ui/pagination";
-import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { CustomSelect } from "./CustomSelect";
+} from '@/components/ui/pagination'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { CustomSelect } from './CustomSelect'
 
 interface PaginationProps {
-  totalItems: number;
-  itemsPerPage: number;
-  currentPage: number;
+  totalItems: number
+  itemsPerPage: number
+  currentPage: number
 }
 
-const MAX_NUMBER_OF_PAGES = 3;
-const PAGE_NUMBER_LIMIT = Math.floor(MAX_NUMBER_OF_PAGES / 2);
+const MAX_NUMBER_OF_PAGES = 3
+const PAGE_NUMBER_LIMIT = Math.floor(MAX_NUMBER_OF_PAGES / 2)
 
 export function CustomPagination({
   totalItems,
   itemsPerPage,
   currentPage,
 }: PaginationProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
 
-  const pages = [];
+  const pages = []
   for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
-    pages.push(i);
+    pages.push(i)
   }
 
-  let activePages = pages.slice(
+  const activePages = pages.slice(
     Math.max(0, currentPage - 1 - PAGE_NUMBER_LIMIT),
-    Math.min(currentPage - 1 + PAGE_NUMBER_LIMIT + 1, pages.length)
-  );
+    Math.min(currentPage - 1 + PAGE_NUMBER_LIMIT + 1, pages.length),
+  )
 
   const handleNextPage = () => {
     if (currentPage < pages.length) {
-      params.set("limit", itemsPerPage.toString());
-      params.set("offset", (itemsPerPage * currentPage).toString());
+      params.set('limit', itemsPerPage.toString())
+      params.set('offset', (itemsPerPage * currentPage).toString())
 
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`)
     }
-  };
+  }
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
-      const newPage = currentPage - 1;
-      const offset = itemsPerPage * (newPage - 1);
+      const newPage = currentPage - 1
+      const offset = itemsPerPage * (newPage - 1)
 
-      params.set("limit", itemsPerPage.toString());
-      params.set("offset", offset.toString());
+      params.set('limit', itemsPerPage.toString())
+      params.set('offset', offset.toString())
 
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`)
     }
-  };
+  }
 
   const handlePageClick = (page: number) => {
-    const offset = itemsPerPage * (page - 1);
+    const offset = itemsPerPage * (page - 1)
 
-    params.set("limit", itemsPerPage.toString());
-    params.set("offset", offset.toString());
+    params.set('limit', itemsPerPage.toString())
+    params.set('offset', offset.toString())
 
-    router.push(`?${params.toString()}`);
-  };
+    router.push(`?${params.toString()}`)
+  }
 
   const handleEllipsisClick = (newPage: number) => {
-    const offset = itemsPerPage * (newPage - 1);
+    const offset = itemsPerPage * (newPage - 1)
 
-    params.set("limit", itemsPerPage.toString());
-    params.set("offset", offset.toString());
+    params.set('limit', itemsPerPage.toString())
+    params.set('offset', offset.toString())
 
-    router.push(`?${params.toString()}`);
-  };
+    router.push(`?${params.toString()}`)
+  }
 
   const renderPages = () => {
     const renderedPages = activePages.map((page, idx) => (
       <PaginationItem
         key={idx}
-        className={currentPage === page ? "bg-neutral-100 rounded-md" : ""}
+        className={currentPage === page ? 'rounded-md bg-neutral-100' : ''}
       >
         <PaginationLink onClick={() => handlePageClick(page)}>
           {page}
         </PaginationLink>
       </PaginationItem>
-    ));
+    ))
 
     if (activePages[0] > 1) {
       renderedPages.unshift(
         <PaginationEllipsis
           key="ellipsis-start"
           onClick={() => handleEllipsisClick(activePages[0] - 1)}
-        />
-      );
+        />,
+      )
     }
 
     if (activePages[activePages.length - 1] < pages.length) {
@@ -112,40 +105,40 @@ export function CustomPagination({
           onClick={() =>
             handleEllipsisClick(activePages[activePages.length - 1] + 1)
           }
-        />
-      );
+        />,
+      )
     }
 
-    return renderedPages;
-  };
+    return renderedPages
+  }
 
   const handleRowsPerPage = (value: string) => {
-    const offset = itemsPerPage * (currentPage - 1);
+    const offset = itemsPerPage * (currentPage - 1)
 
-    params.set("limit", value.toString());
-    params.set("offset", offset.toString());
+    params.set('limit', value.toString())
+    params.set('offset', offset.toString())
 
-    router.push(`?${params.toString()}`);
-  };
+    router.push(`?${params.toString()}`)
+  }
 
   const itemsPerPageOptions = [
     {
-      value: "20",
-      label: "20",
+      value: '20',
+      label: '20',
     },
     {
-      value: "30",
-      label: "30",
+      value: '30',
+      label: '30',
     },
     {
-      value: "40",
-      label: "40",
+      value: '40',
+      label: '40',
     },
-  ];
+  ]
 
   return (
-    <div className="row-span-2 col-[span_36_/_span_36] grid place-items-center">
-      <div className="flex items-center w-3/6 justify-between">
+    <div className="col-[span_36_/_span_36] row-span-2 grid place-items-center">
+      <div className="flex w-3/6 items-center justify-between">
         <Pagination>
           <PaginationContent>
             <PaginationItem>
@@ -163,7 +156,7 @@ export function CustomPagination({
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-        <div className="w-6/12 flex items-center gap-3">
+        <div className="flex w-6/12 items-center gap-3">
           <p className="text-sm">Pokemons per page:</p>
           <CustomSelect
             className="w-4/12"
@@ -174,5 +167,5 @@ export function CustomPagination({
         </div>
       </div>
     </div>
-  );
+  )
 }

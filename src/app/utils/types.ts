@@ -1,4 +1,4 @@
-interface OptionProps {
-  value: string;
-  label: string;
+export interface OptionProps {
+  value: string
+  label: string
 }
