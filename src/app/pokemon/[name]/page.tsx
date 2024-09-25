@@ -1,8 +1,12 @@
-import { useEffect } from "react";
+"use client";
+
+import { use, useEffect } from "react";
 import Image from "next/image";
 import { twJoin, twMerge } from "tailwind-merge";
 import { POKEMON_TYPE_TAILWIND_COLORS } from "@/app/utils/constants";
 import { PokemonImage } from "./PokemonImage";
+import { getPokemon } from "./get-pokemon";
+import { useSearchParams, useRouter } from "next/navigation";
 
 interface PokemonDetailsProps {
   params: {
@@ -10,11 +14,11 @@ interface PokemonDetailsProps {
   };
 }
 
-export default async function PokemonDetails({ params }: PokemonDetailsProps) {
-  const response = await fetch(
-    `https://pokeapi.co/api/v2/pokemon/${params.name}`
-  );
-  const pokemon = await response.json();
+export default function PokemonDetails({ params }: PokemonDetailsProps) {
+  const pokemon = use(getPokemon(params.name));
+  const searchParams = useSearchParams();
+  const currentParams = new URLSearchParams(searchParams.toString());
+  const router = useRouter();
 
   const pokemonType = pokemon.types[0].type
     .name as keyof typeof POKEMON_TYPE_TAILWIND_COLORS;
@@ -37,7 +41,12 @@ export default async function PokemonDetails({ params }: PokemonDetailsProps) {
           <p className="text-3xl">{pokemon.name}</p>
           <div>
             {pokemon.types.map(({ type }: { type: { name: string } }) => (
-              <p className="text-4xl">{type.name}</p>
+              <p
+                className="text-4xl"
+                onClick={() => router.push(`/?type=${type}`)}
+              >
+                {type.name}
+              </p>
             ))}
           </div>
         </div>
