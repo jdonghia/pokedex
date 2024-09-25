@@ -7,6 +7,7 @@ import { POKEAPI_BASE_URL } from './utils/constants'
 import { PokemonSearch } from '@/components/PokemonSearch'
 import { PokemonsList } from '@/components/PokemonsList'
 import { Suspense } from 'react'
+import { PokemonNotFound } from '@/components/PokemonNotFound'
 
 export default function Home() {
   const searchParams = useSearchParams()
@@ -20,7 +21,11 @@ export default function Home() {
 
   const currentPage = Math.floor(offset / limit + 1)
 
-  const { data: pokemonsResponse, isLoading } = useQuery({
+  const {
+    data: pokemonsResponse,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['get-pokemons', limit, offset, pokemon, type],
     queryFn: async () => {
       let url = `${POKEAPI_BASE_URL}/pokemon`
@@ -88,15 +93,21 @@ export default function Home() {
         {!isLoading && (
           <>
             <PokemonSearch />
-            <PokemonsList pokemons={pokemonsResponse?.results} />
-            {!(pokemon || type) && (
-              <Suspense>
-                <CustomPagination
-                  totalItems={pokemonsResponse?.count}
-                  itemsPerPage={limit}
-                  currentPage={currentPage}
-                />
-              </Suspense>
+            {isError ? (
+              <PokemonNotFound />
+            ) : (
+              <>
+                <PokemonsList pokemons={pokemonsResponse?.results} />
+                {!(pokemon || type) && (
+                  <Suspense>
+                    <CustomPagination
+                      totalItems={pokemonsResponse?.count}
+                      itemsPerPage={limit}
+                      currentPage={currentPage}
+                    />
+                  </Suspense>
+                )}
+              </>
             )}
           </>
         )}
