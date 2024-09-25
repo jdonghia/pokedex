@@ -1,13 +1,13 @@
 "use client";
 
-import { CustomSelect } from "@/components/CustomSelect";
+import { CustomSelect } from "@/components/shared/CustomSelect";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
-export function SearchPokemon() {
+export function PokemonSearch() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
@@ -29,7 +29,7 @@ export function SearchPokemon() {
 
   useEffect(() => {
     if (searchBy === "type") {
-      setSearchedValue("1");
+      setSearchedValue("normal");
     } else {
       setSearchedValue("");
     }
@@ -42,8 +42,8 @@ export function SearchPokemon() {
         const data = await res.json();
 
         const formattedData = data.results.map(
-          ({ name, url }: { name: string; url: string }) => ({
-            value: url.split("/")[6],
+          ({ name }: { name: string }) => ({
+            value: name,
             label: name,
           })
         );
@@ -82,7 +82,7 @@ export function SearchPokemon() {
         <CustomSelect
           onValueChange={setSearchedValue}
           options={pokemonTypes}
-          defaultValue="1"
+          defaultValue="normal"
         />
       )}
       {searchBy === "pokemon" && (

@@ -1,5 +1,5 @@
 import {
-  Pagination as ShadcnuiPagination,
+  Pagination,
   PaginationContent,
   PaginationItem,
   PaginationPrevious,
@@ -23,32 +23,32 @@ interface PaginationProps {
 }
 
 const MAX_NUMBER_OF_PAGES = 5;
+const PAGE_NUMBER_LIMIT = Math.floor(MAX_NUMBER_OF_PAGES / 2);
 
-export function Pagination({
+export function CustomPagination({
   totalItems,
   itemsPerPage,
   currentPage,
 }: PaginationProps) {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
+
   const pages = [];
   for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
     pages.push(i);
   }
-  const router = useRouter();
 
-  const pageNumLimit = Math.floor(MAX_NUMBER_OF_PAGES / 2);
-
-  const params = new URLSearchParams(searchParams.toString());
-
-  let activePages = pages.slice(
-    Math.max(0, currentPage - 1 - pageNumLimit),
-    Math.min(currentPage - 1 + pageNumLimit + 1, pages.length)
+  const activePages = pages.slice(
+    Math.max(0, currentPage - 1 - PAGE_NUMBER_LIMIT),
+    Math.min(currentPage - 1 + PAGE_NUMBER_LIMIT + 1, pages.length)
   );
 
   const handleNextPage = () => {
     if (currentPage < pages.length) {
       params.set("limit", itemsPerPage.toString());
       params.set("offset", (itemsPerPage * currentPage).toString());
+
       router.push(`?${params.toString()}`);
     }
   };
@@ -120,6 +120,7 @@ export function Pagination({
 
   const handleRowsPerPage = (value: string) => {
     params.set("limit", value.toString());
+
     router.push(`?${params.toString()}`);
   };
 
@@ -136,19 +137,17 @@ export function Pagination({
           <SelectItem value="40">40</SelectItem>
         </SelectContent>
       </Select>
-      <ShadcnuiPagination>
+      <Pagination>
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious onClick={handlePrevPage} />
           </PaginationItem>
-
           {renderPages()}
-
           <PaginationItem>
             <PaginationNext onClick={handleNextPage} />
           </PaginationItem>
         </PaginationContent>
-      </ShadcnuiPagination>
+      </Pagination>
     </div>
   );
 }

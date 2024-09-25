@@ -1,10 +1,10 @@
 "use client";
 
-import { Pagination } from "@/components/Pagination";
+import { CustomPagination } from "@/components/shared/CustomPagination";
 import { useSearchParams } from "next/navigation";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { POKEAPI_BASE_URL } from "./utils/constants";
-import { SearchPokemon } from "@/components/SearchPokemon";
+import { PokemonSearch } from "@/components/PokemonSearch";
 import { PokemonsList } from "@/components/PokemonsList";
 import { Suspense } from "react";
 
@@ -86,11 +86,11 @@ export default function Home() {
     <>
       {!isLoading && (
         <>
-          <SearchPokemon />
+          <PokemonSearch />
           <PokemonsList pokemons={pokemonsResponse?.results} />
           {!(pokemon || type) && (
             <Suspense>
-              <Pagination
+              <CustomPagination
                 totalItems={pokemonsResponse?.count}
                 itemsPerPage={limit}
                 currentPage={currentPage}
