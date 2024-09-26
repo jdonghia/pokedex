@@ -91,29 +91,28 @@ export default function Home() {
   return (
     <div className="grid place-items-center bg-neutral-400">
       <div className="m-auto grid h-screen w-2/3 grid-cols-app grid-rows-app">
-        <LoadingScreen loading={isLoading}>
-          {!isLoading && (
-            <>
-              <PokemonSearch />
-              {isError ? (
-                <PokemonNotFound />
-              ) : (
-                <>
-                  <PokemonsList pokemons={pokemonsResponse?.results} />
-                  {!(pokemon || type) && (
-                    <Suspense>
-                      <CustomPagination
-                        totalItems={pokemonsResponse?.count}
-                        itemsPerPage={limit}
-                        currentPage={currentPage}
-                      />
-                    </Suspense>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </LoadingScreen>
+        <LoadingScreen loading={isLoading} />
+        {!isLoading && (
+          <>
+            <PokemonSearch />
+            {isError ? (
+              <PokemonNotFound />
+            ) : (
+              <>
+                <PokemonsList pokemons={pokemonsResponse?.results} />
+                {!(pokemon || type) && (
+                  <Suspense>
+                    <CustomPagination
+                      totalItems={pokemonsResponse?.count}
+                      itemsPerPage={limit}
+                      currentPage={currentPage}
+                    />
+                  </Suspense>
+                )}
+              </>
+            )}
+          </>
+        )}
       </div>
     </div>
   )

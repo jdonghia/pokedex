@@ -54,6 +54,7 @@ export default function PokemonDetails({ params }: PokemonDetailsProps) {
 
   return (
     <div className="absolute inset-0 grid h-screen place-items-center">
+      <LoadingScreen loading={isLoading} />
       {!isLoading && (
         <div
           className={twMerge(
