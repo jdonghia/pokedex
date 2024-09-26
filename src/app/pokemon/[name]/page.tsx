@@ -2,10 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import {
-  POKEMON_TYPE_TAILWIND_BG_COLORS,
-  POKEMON_TYPE_TAILWIND_FILL_COLORS,
-} from '@/app/utils/constants'
+import { POKEMON_TYPE_TAILWIND_BG_COLORS } from '@/app/utils/constants'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
@@ -99,7 +96,7 @@ export default function PokemonDetails({ params }: PokemonDetailsProps) {
               <span className="block">Toggle shiny</span>
               <Switch onCheckedChange={switchPokemonImage} />
             </div>
-            <span className="mt-4 block font-semibold">
+            <span className="block font-semibold">
               #{padToFourDigits(pokemon.id)}
             </span>
             <p className="mt-3 text-4xl font-bold">
@@ -110,7 +107,7 @@ export default function PokemonDetails({ params }: PokemonDetailsProps) {
                 <p
                   key={type.name}
                   className={twMerge(
-                    'text-2xl uppercase py-2 mt-6 mb-4 w-36 text-center rounded-full cursor-pointer',
+                    'text-xl uppercase py-2 mt-6 mb-4 w-28 text-center rounded-full cursor-pointer',
                     POKEMON_TYPE_TAILWIND_BG_COLORS[
                       type.name as keyof typeof POKEMON_TYPE_TAILWIND_BG_COLORS
                     ],
@@ -122,24 +119,8 @@ export default function PokemonDetails({ params }: PokemonDetailsProps) {
               ))}
             </div>
 
-            <div
-              className={twMerge(
-                'w-full h-full rounded-b-2xl relative',
-                POKEMON_TYPE_TAILWIND_BG_COLORS[
-                  pokemon.types[0].type
-                    .name as keyof typeof POKEMON_TYPE_TAILWIND_BG_COLORS
-                ],
-              )}
-            >
-              <Pokeball
-                className={twMerge(
-                  'absolute inset-x-0 m-auto size-14 -translate-y-6 rounded-full bg-white p-1',
-                  POKEMON_TYPE_TAILWIND_FILL_COLORS[
-                    pokemon.types[0].type
-                      .name as keyof typeof POKEMON_TYPE_TAILWIND_BG_COLORS
-                  ],
-                )}
-              />
+            <div className="relative size-full rounded-b-2xl bg-[#cc3333]">
+              <Pokeball className="absolute inset-x-0 m-auto size-14 -translate-y-6 rounded-full bg-white fill-[#cc3333] p-1" />
               <div className="m-auto flex h-full items-center justify-center gap-10">
                 {pokemon.stats.map(
                   ({

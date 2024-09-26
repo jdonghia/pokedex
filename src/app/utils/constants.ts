@@ -19,25 +19,4 @@ export const POKEMON_TYPE_TAILWIND_BG_COLORS = {
   fairy: 'bg-fairy',
 }
 
-export const POKEMON_TYPE_TAILWIND_FILL_COLORS = {
-  normal: 'fill-normal',
-  fighting: 'fill-fighting',
-  flying: 'fill-flying',
-  poison: 'fill-poison',
-  ground: 'fill-ground',
-  rock: 'fill-rock',
-  bug: 'fill-bug',
-  ghost: 'fill-ghost',
-  steel: 'fill-steel',
-  fire: 'fill-fire',
-  water: 'fill-water',
-  grass: 'fill-grass',
-  electric: 'fill-electric',
-  psychic: 'fill-psychic',
-  ice: 'fill-ice',
-  dragon: 'fill-dragon',
-  dark: 'fill-dark',
-  fairy: 'fill-fairy',
-}
-
 export const POKEAPI_BASE_URL = 'https://pokeapi.co/api/v2'
