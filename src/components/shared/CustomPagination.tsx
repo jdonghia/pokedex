@@ -83,7 +83,10 @@ export function CustomPagination({
         key={idx}
         className={currentPage === page ? 'rounded-md bg-neutral-100' : ''}
       >
-        <PaginationLink onClick={() => handlePageClick(page)}>
+        <PaginationLink
+          onClick={() => handlePageClick(page)}
+          className="cursor-pointer"
+        >
           {page}
         </PaginationLink>
       </PaginationItem>
@@ -93,6 +96,7 @@ export function CustomPagination({
       renderedPages.unshift(
         <PaginationEllipsis
           key="ellipsis-start"
+          className="cursor-pointer"
           onClick={() => handleEllipsisClick(activePages[0] - 1)}
         />,
       )
@@ -102,6 +106,7 @@ export function CustomPagination({
       renderedPages.push(
         <PaginationEllipsis
           key="ellipsis-end"
+          className="cursor-pointer"
           onClick={() =>
             handleEllipsisClick(activePages[activePages.length - 1] + 1)
           }
@@ -127,18 +132,18 @@ export function CustomPagination({
       label: '20',
     },
     {
-      value: '30',
-      label: '30',
-    },
-    {
       value: '40',
       label: '40',
+    },
+    {
+      value: '60',
+      label: '60',
     },
   ]
 
   return (
-    <div className="col-[span_36_/_span_36] row-span-2 grid place-items-center">
-      <div className="flex w-3/6 items-center justify-between">
+    <div className="col-[span_36_/_span_36] row-span-2 grid place-items-center bg-[#e8e8e8]">
+      <div className="flex w-4/6 items-center justify-between">
         <Pagination>
           <PaginationContent>
             <PaginationItem>
@@ -156,7 +161,7 @@ export function CustomPagination({
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-        <div className="flex w-6/12 items-center gap-3">
+        <div className="flex w-7/12 items-center gap-3">
           <p className="text-sm">Pokemons per page:</p>
           <CustomSelect
             className="w-4/12"
