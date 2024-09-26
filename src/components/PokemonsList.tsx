@@ -16,8 +16,8 @@ export function PokemonsList({ pokemons }: PokemonListProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
-            delay: index * 0.01,
-            ease: 'easeIn',
+            delay: index * 0.005,
+            ease: 'easeInOut',
           }}
           key={pokemon.name}
           className="relative z-30 my-4 flex h-1/5 w-1/6 flex-col items-center justify-center rounded-lg bg-zinc-200"
@@ -26,7 +26,9 @@ export function PokemonsList({ pokemons }: PokemonListProps) {
             <div className="flex cursor-pointer flex-col items-center rounded p-2">
               <Image
                 src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-                alt={`${pokemon.name} picture`}
+                alt=""
+                // alt is also translating when not image found.
+                // alt={`${pokemon.name} picture`}
                 width={130}
                 height={1}
                 priority
@@ -37,6 +39,7 @@ export function PokemonsList({ pokemons }: PokemonListProps) {
                 <p className="z-50 mt-4 text-lg font-bold">
                   {pokemon.name
                     .split('-')
+                    .slice(0, 2)
                     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                     .join(' ')}
                 </p>
