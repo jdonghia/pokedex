@@ -91,7 +91,7 @@ export function PokemonSearch() {
           />
           <Image src="/imusica-logo.png" width={70} height={70} alt="imusica" />
         </div>
-        <div className="flex">
+        <div className="flex w-full">
           <CustomTooltip
             content={
               <Button
