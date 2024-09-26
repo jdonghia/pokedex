@@ -2,10 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import {
-  POKEMON_STATS_ABBREVIATION,
-  POKEMON_TYPE_TAILWIND_BG_COLORS,
-} from '@/app/utils/constants'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
