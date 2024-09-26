@@ -8,6 +8,12 @@ import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { TbPokeball } from 'react-icons/tb'
 import type { OptionProps } from '@/app/utils/types'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 export function PokemonSearch() {
   const router = useRouter()
@@ -100,15 +106,34 @@ export function PokemonSearch() {
             onKeyDown={(e) => (e.key === 'Enter' ? handlePokemonSearch() : '')}
           />
         )}
-        <Button
-          onClick={handlePokemonSearch}
-          className="rounded-none rounded-e bg-white"
-        >
-          <TbPokeball size={25} className="text-red-500" />
-        </Button>
-        <Button className="ms-5 bg-white" onClick={resetFilter}>
-          <RotateCw className="text-red-500" />
-        </Button>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button
+                onClick={handlePokemonSearch}
+                className="rounded-none rounded-e bg-white"
+              >
+                <TbPokeball size={25} className="text-red-500" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Gotta catch&apos;em all!</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button className="ms-5 bg-white" onClick={resetFilter}>
+                <RotateCw className="text-red-500" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Reset filters</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   )
