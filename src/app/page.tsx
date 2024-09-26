@@ -8,6 +8,7 @@ import { PokemonSearch } from '@/components/PokemonSearch'
 import { PokemonsList } from '@/components/PokemonsList'
 import { Suspense } from 'react'
 import { PokemonNotFound } from '@/components/PokemonNotFound'
+import { LoadingScreen } from '@/components/shared/LoadingScreen'
 
 export default function Home() {
   const searchParams = useSearchParams()
@@ -90,27 +91,29 @@ export default function Home() {
   return (
     <div className="grid place-items-center bg-neutral-400">
       <div className="m-auto grid h-screen w-2/3 grid-cols-app grid-rows-app">
-        {!isLoading && (
-          <>
-            <PokemonSearch />
-            {isError ? (
-              <PokemonNotFound />
-            ) : (
-              <>
-                <PokemonsList pokemons={pokemonsResponse?.results} />
-                {!(pokemon || type) && (
-                  <Suspense>
-                    <CustomPagination
-                      totalItems={pokemonsResponse?.count}
-                      itemsPerPage={limit}
-                      currentPage={currentPage}
-                    />
-                  </Suspense>
-                )}
-              </>
-            )}
-          </>
-        )}
+        <LoadingScreen loading={isLoading}>
+          {!isLoading && (
+            <>
+              <PokemonSearch />
+              {isError ? (
+                <PokemonNotFound />
+              ) : (
+                <>
+                  <PokemonsList pokemons={pokemonsResponse?.results} />
+                  {!(pokemon || type) && (
+                    <Suspense>
+                      <CustomPagination
+                        totalItems={pokemonsResponse?.count}
+                        itemsPerPage={limit}
+                        currentPage={currentPage}
+                      />
+                    </Suspense>
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </LoadingScreen>
       </div>
     </div>
   )
