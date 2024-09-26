@@ -15,7 +15,7 @@ export function CustomTooltip({ content, text }: CustomTooltipProps) {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>{content}</TooltipTrigger>
+        <TooltipTrigger asChild={true}>{content}</TooltipTrigger>
         <TooltipContent>
           <p>{text}</p>
         </TooltipContent>

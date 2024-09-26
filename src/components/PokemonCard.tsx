@@ -26,9 +26,9 @@ export function PokemonCard({ name, id }: PokemonCardProps) {
           // alt is also translating when not image found.
           // alt={`${name} picture`}
           width={130}
-          height={1}
+          height={130}
           priority
-          className="absolute inset-x-0 top-0 z-50 m-auto -translate-y-16"
+          className="absolute inset-x-0 top-0 z-50 m-auto size-32 -translate-y-16"
         />
         <motion.div
           className={`absolute inset-x-0 bottom-0 flex flex-col items-center rounded-b bg-[#c1c1cb] pb-2 pt-4 ${hovered && 'bg-[#cc3333] transition-colors'}`}

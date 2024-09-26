@@ -18,9 +18,11 @@ export function LoadingScreen({ loading }: LoadingScreenProps) {
           <div className="flex flex-col items-center">
             <Image
               src="/pokedex-logo.png"
+              className="size-auto"
               width={250}
               height={50}
               alt="pokedex"
+              priority
             />
           </div>
         </motion.div>

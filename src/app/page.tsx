@@ -67,7 +67,7 @@ export default function Home() {
             return data.results.map(
               ({ name, url }: { name: string; url: string }) => ({
                 name,
-                // sprite value splitted by url string: explain at README.md
+                // sprite value splitted by url string: explained at README.md
                 id: url.split('/')[6],
               }),
             )
@@ -81,7 +81,6 @@ export default function Home() {
 
         return formattedData
       } catch (error) {
-        // catch exception, push user to 404 route, pokemon not found
         console.error(error)
       }
     },

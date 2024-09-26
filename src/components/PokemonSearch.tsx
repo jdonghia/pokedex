@@ -82,7 +82,13 @@ export function PokemonSearch() {
     <div className="relative col-[span_36_/_span_36] row-span-2 grid place-items-center bg-[#e8e8e8]">
       <div className="flex w-3/6 items-center ">
         <div className="absolute left-10 flex items-center gap-4">
-          <Image src="/pokedex-logo.png" width={90} height={90} alt="pokedex" />
+          <Image
+            src="/pokedex-logo.png"
+            width={90}
+            height={90}
+            alt="pokedex"
+            className="size-auto"
+          />
           <Image src="/imusica-logo.png" width={70} height={70} alt="imusica" />
         </div>
         <div className="flex">
