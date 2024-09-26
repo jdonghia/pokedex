@@ -1,4 +1,4 @@
-import { padToFourDigits } from '@/app/utils/helpers'
+import { capitalizeString, padToFourDigits } from '@/app/utils/helpers'
 import { TbPokeball } from 'react-icons/tb'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -25,11 +25,7 @@ export function PokemonCard({ name, id }: PokemonCardProps) {
         <div className="absolute inset-x-0 bottom-0 flex flex-col items-center rounded-b bg-zinc-500 pb-2 pt-4">
           <TbPokeball className="absolute top-0 z-10 size-12 -translate-y-4 rounded-full bg-zinc-500 text-white" />
           <p className="z-50 mt-4 text-lg font-bold">
-            {name
-              .split('-')
-              .slice(0, 2)
-              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(' ')}
+            {capitalizeString(name)}
           </p>
           <span>#{padToFourDigits(id)}</span>
         </div>

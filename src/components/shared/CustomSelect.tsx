@@ -8,8 +8,7 @@ import {
 } from '@/components/ui/select'
 
 interface SelectProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onValueChange: (value: any) => void
+  onValueChange: (value: string) => void
   options: OptionProps[]
   placeholder?: string
   defaultValue?: string

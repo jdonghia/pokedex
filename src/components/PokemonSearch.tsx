@@ -8,12 +8,7 @@ import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { TbPokeball } from 'react-icons/tb'
 import type { OptionProps } from '@/app/utils/types'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { CustomTooltip } from './shared/CustomTooltip'
 
 export function PokemonSearch() {
   const router = useRouter()
@@ -36,11 +31,7 @@ export function PokemonSearch() {
   ]
 
   useEffect(() => {
-    if (searchBy === 'type') {
-      setSearchedValue('normal')
-    } else {
-      setSearchedValue('')
-    }
+    clearSearchedValue()
   }, [searchBy])
 
   useEffect(() => {
@@ -65,17 +56,25 @@ export function PokemonSearch() {
     getPokemonTypes()
   }, [])
 
-  const handlePokemonSearch = () => {
+  const searchPokemon = () => {
     if (searchedValue) {
       params.set(searchBy, searchedValue)
       router.push(`?${searchBy}=${searchedValue}`)
     }
   }
 
-  const resetFilter = () => {
+  const clearFilters = () => {
     setSearchBy('pokemon')
     setSearchedValue('')
     router.push('/')
+  }
+
+  const clearSearchedValue = () => {
+    if (searchBy === 'type') {
+      setSearchedValue('normal')
+    } else {
+      setSearchedValue('')
+    }
   }
 
   return (
@@ -103,37 +102,28 @@ export function PokemonSearch() {
             type="text"
             placeholder="Search for pokemon"
             onChange={(e) => setSearchedValue(e.target.value)}
-            onKeyDown={(e) => (e.key === 'Enter' ? handlePokemonSearch() : '')}
+            onKeyDown={(e) => (e.key === 'Enter' ? searchPokemon() : '')}
           />
         )}
-
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <Button
-                onClick={handlePokemonSearch}
-                className="rounded-none rounded-e bg-white"
-              >
-                <TbPokeball size={25} className="text-red-500" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Gotta catch&apos;em all!</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <Button className="ms-5 bg-white" onClick={resetFilter}>
-                <RotateCw className="text-red-500" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Reset filters</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <CustomTooltip
+          content={
+            <Button
+              onClick={searchPokemon}
+              className="rounded-none rounded-e bg-white"
+            >
+              <TbPokeball size={25} className="text-red-500" />
+            </Button>
+          }
+          text="Gotta catch'em all!"
+        />
+        <CustomTooltip
+          content={
+            <Button className="ms-5 bg-white" onClick={clearFilters}>
+              <RotateCw className="text-red-500" />
+            </Button>
+          }
+          text="Reset filters"
+        />
       </div>
     </div>
   )

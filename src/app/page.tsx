@@ -54,10 +54,10 @@ export default function Home() {
 
           if (data.pokemon) {
             return data.pokemon.map(
-              (item: { pokemon: { name: string; url: string } }) => {
+              ({ pokemon }: { pokemon: { name: string; url: string } }) => {
                 return {
-                  name: item.pokemon.name,
-                  id: item.pokemon.url.split('/')[6],
+                  name: pokemon.name,
+                  id: pokemon.url.split('/')[6],
                 }
               },
             )

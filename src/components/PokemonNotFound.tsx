@@ -4,6 +4,7 @@ export function PokemonNotFound() {
       <div className="flex flex-col items-center">
         <span className="text-9xl font-bold">404</span>
         <p>Sorry, we couldnt find any pokemon match</p>
+        <p>Click on reload to reset filters</p>
       </div>
     </div>
   )
