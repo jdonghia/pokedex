@@ -4,7 +4,19 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+First, install the project dependencies:
+
+```bash
+npm i
+# or
+yarn
+# or
+pnpm install
+# or
+bun install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -23,6 +35,18 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Overview
 
 The project’s primary goal is to create a Pokedex where users can search for and explore Pokémon with ease. It supports searching, filtering by type, and viewing detailed stats for each Pokémon. The app includes pagination for large datasets and optimized URL handling.
+
+## Technical Details
+
+- **Next.js**: Chosen for its modern features and standard recommendations for **React** projects, including server-side rendering (SSR) and other optimizations.
+
+- **React Query:** Manages API requests and handles pagination, storing state via URL queries.
+
+- **shadcn/ui**: Provides consistent, modern UI components.
+
+- **Tailwind CSS**: Implements dynamic styling throughout the application.
+
+- **Framer Motion**: Adds interactive animations to enhance the user experience.
 
 ## Key Considerations
 
@@ -62,18 +86,6 @@ The project’s primary goal is to create a Pokedex where users can search for a
 - **Pokemon Search**: Users can search Pokémon by name or number. Clicking a Pokémon's type leads to a list of all Pokémon of that type (without pagination due to API limits). A reset button allows users to clear all filters and return to the default Pokémon list.
 
 - **Pokemon Details**: The details page for each Pokémon.
-
-## Technical Details
-
-- **Next.js**: Chosen for its modern features and standard recommendations for **React** projects, including server-side rendering (SSR) and other optimizations.
-
-- **React Query:** Manages API requests and handles pagination, storing state via URL queries.
-
-- **shadcn/ui**: Provides consistent, modern UI components.
-
-- **Tailwind CSS**: Implements dynamic styling throughout the application..
-
-- **Framer Motion**: Adds interactive animations to enhance the user experience.
 
 ## UI/UX Design
 
