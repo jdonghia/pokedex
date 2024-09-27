@@ -10,7 +10,7 @@ export function PokemonTypes({ types }: PokemonTypesProps) {
   const router = useRouter()
 
   return (
-    <>
+    <div className="mb-5 flex gap-7">
       {types.map(({ type }: { type: { name: string } }) => (
         <p
           key={type.name}
@@ -25,6 +25,6 @@ export function PokemonTypes({ types }: PokemonTypesProps) {
           {type.name}
         </p>
       ))}
-    </>
+    </div>
   )
 }

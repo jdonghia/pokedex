@@ -8,7 +8,6 @@ import Image from 'next/image'
 import { Switch } from '@/components/ui/switch'
 import { capitalizeString, padToFourDigits } from '@/app/utils/helpers'
 import { IoMdArrowRoundBack } from 'react-icons/io'
-import Pokeball from '@/components/svgs/Pokeball'
 import { PokemonStats } from './PokemonStats'
 import { PokemonTypes } from './PokemonTypes'
 
@@ -93,15 +92,8 @@ export default function PokemonDetails({ params }: PokemonDetailsProps) {
             <p className="mt-3 text-4xl font-bold">
               {capitalizeString(pokemon.name)}
             </p>
-            <div className="mb-5 flex gap-7">
-              <PokemonTypes types={pokemon.types} />
-            </div>
-            <div className="relative size-full rounded-b-2xl bg-[#cc3333]">
-              <Pokeball className="absolute inset-x-0 m-auto size-14 -translate-y-6 rounded-full bg-white fill-[#cc3333] p-1" />
-              <div className="m-auto flex h-full items-center justify-center gap-10">
-                <PokemonStats stats={pokemon.stats} />
-              </div>
-            </div>
+            <PokemonTypes types={pokemon.types} />
+            <PokemonStats stats={pokemon.stats} />
           </div>
         </div>
       )}
