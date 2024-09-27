@@ -6,7 +6,6 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { POKEAPI_BASE_URL } from './utils/constants'
 import { PokemonSearch } from '@/components/PokemonSearch'
 import { PokemonsList } from '@/components/PokemonsList'
-import { Suspense } from 'react'
 import { PokemonNotFound } from '@/components/PokemonNotFound'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 
@@ -93,20 +92,18 @@ export default function Home() {
       {!isLoading && (
         <>
           <PokemonSearch />
-          {isError ? (
-            <PokemonNotFound />
-          ) : (
-            <>
+          <>
+            {isError ? (
+              <PokemonNotFound />
+            ) : (
               <PokemonsList pokemons={pokemonsResponse?.results} />
-              <Suspense>
-                <CustomPagination
-                  totalItems={pokemonsResponse?.count}
-                  itemsPerPage={limit}
-                  currentPage={currentPage}
-                />
-              </Suspense>
-            </>
-          )}
+            )}
+            <CustomPagination
+              totalItems={pokemonsResponse?.count || 0}
+              itemsPerPage={limit}
+              currentPage={currentPage}
+            />
+          </>
         </>
       )}
     </>
